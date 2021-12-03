@@ -1,1 +1,17 @@
 \chapter{广义逆矩阵理论}
+\section{Penrose 广义逆矩阵定义}
+设矩阵 $A \in C^{m \times n}$ ，若矩阵 $X \in C^{n \times M}$满足如下四个 Penrose 方程
+\begin{enumerate}
+    \item $AXA=A$
+    \item $XAX=X$
+    \item $(AX)^H=AX$
+    \item $(XA)^H=XA$
+\end{enumerate}
+则 $X$ 称为 $A$ 的\textbf{Moore-Penrose 逆}，记为 $A^+$
+
+
+\section{广义逆矩阵与线性方程的求解}
+对于非齐次线性方程组
+\begin{equation}
+    Ax=b
+\end{equation}
