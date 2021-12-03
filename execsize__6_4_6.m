@@ -1,3 +1,5 @@
+clear all;
+clc;
 %% 6.4 - 6.
 A = [
     1, 0, 0, 1;
@@ -16,7 +18,7 @@ disp(A_inverse)
 %% (1) b=[1;1;1;1];
 disp("=================================")
 b=[1;1;1;1];
-x_0=A_inverse*b1;
+x_0=A_inverse*b;
 disp("for b=")
 disp(b)
 disp("compute A*A^+*b=")
