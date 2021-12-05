@@ -1,15 +1,12 @@
 \chapter{广义逆矩阵理论}
 \section{Penrose 广义逆矩阵定义}
 设矩阵 $A \in C^{m \times n}$ ，若矩阵 $X \in C^{n \times M}$满足如下四个 Penrose 方程
-\begin{equation}
-    \begin{aligned}
-        \text{(1)}:\quad& AXA     = A \\
-        \text{(2)}:\quad& XAX     = X \\
-        \text{(3)}:\quad& (AX)^H  = AX \\
-        \text{(4)}:\quad& (XA)^H  = XA \\
-    \end{aligned}
-    \label{Eq.Penrose_conditions}
-\end{equation}
+\begin{enumerate}
+    \item $AXA=A$
+    \item $XAX=X$
+    \item $(AX)^H=AX$
+    \item $(XA)^H=XA$
+\end{enumerate}
 则 $X$ 称为 $A$ 的\textbf{Moore-Penrose 逆}，记为 $A^+$
 
 Moore-Penrose 伪逆是一种矩阵，可在不存在逆矩阵的情况下作为逆矩阵的部分替代。此矩阵常被用于求解没有唯一解或有许多解的线性方程组。对于任何矩阵 $A$ 来说，伪逆 $B$ 都存在，是唯一的，并且具有与 $A^T $ 相同的维度。
@@ -23,11 +20,10 @@ Moore-Penrose 伪逆是一种矩阵，可在不存在逆矩阵的情况下作为
 \end{equation}
 其中 $A \in C^{m \times n} ,b\in C^{m}$ 给定，而 $x\in C^n$ 为待定向量。如果存在向量 $x$ 使得方程组 \ref{Eq.Linear_Eqtions} 成立 ，那么称方程组\textbf{相容}，否则称为\textbf{不相容}或\textbf{矛盾方程组}。
 
-\subsection{相容方程组的相容及其解}
+\subsection{线性方程组的相容条件极其解}
 线性方程组 \ref{Eq.Linear_Eqtions} 相容的充要条件是
 \begin{equation}
     AA^{(1)}b=b
-    \label{Eq.LinearEqtions_ConsistentCondition}
 \end{equation}
 且其通解为
 \begin{equation}
@@ -48,15 +44,29 @@ Moore-Penrose 伪逆是一种矩阵，可在不存在逆矩阵的情况下作为
 
 而相容方程组 \ref{Eq.Linear_Eqtions} 的极小范数解为 $x_0=A^{(1,4)}b$ ，其中$A^{(1,4)}b\in A\{1,4\}$
 
-\subsection{矛盾方程组的相容及其解}
-当线性方程组 \ref{Eq.Linear_Eqtions} 不相容的时候，不存在通常意义下的解，但是许多问题中需要求出极值问题
-\begin{equation}
-    \min\limits_{x\in C^n} ||Ax-b||
-\end{equation}
-的解 $x$ ，称为\textbf{最小二乘解}。矛盾方程组的最小二乘解不唯一，但是中最小二乘解的集合中，存在一个极小范数的解
-\begin{equation}
-    \min\limits_{\min ||Ax-b||} ||x||
-\end{equation}
-是唯一的，称为\textbf{极小范数的最小二乘解}
+\section{广义逆矩阵与线性方程组的求解实验}
 
-线性方程组 \ref{Eq.Linear_Eqtions} 的唯一极小范数最小二乘解为 $x=A^+b$ 
+在 Matlab 中，提供了求 Moore-Penrose 伪逆的函数 \lstinline|pinv()| 
+
+\subsection{实验1}
+该部分 Matlab 仿真的矩阵 $A$ 来自课本习题 6.4 的第6题
+
+\begin{equation}
+    A=\begin{bmatrix}
+        1, 0, 0, 1;
+    1, 1, 0, 0;
+    0, 1, 1, 0;
+    0, 0, 1, 1
+    \end{bmatrix}
+\end{equation}
+
+
+\begin{lstlisting}[language=Matlab]  
+>> A=rand(5,5)*20
+A =
+    14.2243   8.4833    0.5844    4.7457    4.6319
+    4.4349   10.1572   18.5771    9.1770    9.7780
+    2.3484    1.7103   14.6066   19.2618   12.4812
+    5.9335    5.2496    9.7722   10.9361   13.5827
+    6.3756   16.0203   11.5705   10.4227    7.9103
+\end{lstlisting}

@@ -1,0 +1,285 @@
+\chapter{广义逆矩阵与线性方程组的求解实验}
+在 Matlab 中，提供了求 Moore-Penrose 伪逆的函数 \lstinline|pinv()| 
+
+\section{实验内容}
+该部分 Matlab 仿真的矩阵 $A$ 来自课本习题 6.4 的第6题：
+
+已知矩阵 $A=\begin{bmatrix}
+    1 & 0 & 0 & 1 \\
+    1 & 1 & 0 & 0 \\
+    0 & 1 & 1 & 0 \\
+    0 & 0 & 1 & 1
+\end{bmatrix}$.
+\begin{enumerate}
+    \item 当 $b=(1,1,1,1)^T$ 时，方程组 $Ax=b$ 是否相容？
+    \item 当 $b=(1,0,1,0)^T$ 时，方程组 $Ax=b$ 是否相容？
+    \item 若方程组相容，求其通解和极小范数解；若方程组不相容，求其极小范数二乘解.
+\end{enumerate}
+
+\section{实验步骤}
+\subsection{求矩阵的广义逆，并且验证矩阵可逆的条件}
+\textbf{首先求出矩阵 $A$ 的逆}
+\begin{lstlisting}[language=Matlab]  
+>> A = [
+    1, 0, 0, 1;
+    1, 1, 0, 0;
+    0, 1, 1, 0;
+    0, 0, 1, 1
+    ];
+disp("Matrix A:")
+disp(A)
+
+B=pinv(A);
+
+disp("Generalized Inverse Matrix of Matrix A:")
+disp(B)
+Matrix A:
+    1     0     0     1
+    1     1     0     0
+    0     1     1     0
+    0     0     1     1
+
+Generalized Inverse Matrix of Matrix A:
+     0.3750    0.3750   -0.1250   -0.1250
+    -0.1250    0.3750    0.3750   -0.1250
+    -0.1250   -0.1250    0.3750    0.3750
+     0.3750   -0.1250   -0.1250    0.3750
+\end{lstlisting}
+
+对逆矩阵 $B$，我们需要\textbf{验证 Penrose 方程的四个条件\ref{Eq.Penrose_conditions}}，以判断逆矩阵 $B$ 的类型
+
+首先，验证 Penrose 方程 \ref{Eq.Penrose_conditions}-(1) 条件 $AXA = A$ 是否满足
+\begin{lstlisting}[language=Matlab]
+>> disp("Penrose condition 1:")
+disp("AXA")
+disp(A*B*A)
+disp(A)
+
+Penrose condition 1:
+(1) AXA=A
+    1.0000    0.0000    0.0000    1.0000
+    1.0000    1.0000    0.0000    0.0000
+   -0.0000    1.0000    1.0000    0.0000
+   -0.0000         0    1.0000    1.0000
+
+     1     0     0     1
+     1     1     0     0
+     0     1     1     0
+     0     0     1     1
+\end{lstlisting}
+逆矩阵 $B$ 满足 Penrose方程 \ref{Eq.Penrose_conditions}-(1) 条件 $AXA = A$。因此，逆矩阵 $B$ 是 $A$ 的 \{1\}-逆。
+
+验证 Penrose 方程 \ref{Eq.Penrose_conditions}-(2) 条件 $XAX = X$ 是否满足
+\begin{lstlisting}[language=Matlab]
+>> disp("Penrose condition 2:")
+disp("(2) XAX=X")
+disp(B*A*B)
+disp(X)
+
+Penrose condition 2:
+(2) XAX=X
+    0.3750    0.3750   -0.1250   -0.1250
+   -0.1250    0.3750    0.3750   -0.1250
+   -0.1250   -0.1250    0.3750    0.3750
+    0.3750   -0.1250   -0.1250    0.3750
+
+    0.3750    0.3750   -0.1250   -0.1250
+   -0.1250    0.3750    0.3750   -0.1250
+   -0.1250   -0.1250    0.3750    0.3750
+    0.3750   -0.1250   -0.1250    0.3750
+\end{lstlisting}
+逆矩阵 $B$ 满足 Penrose方程 \ref{Eq.Penrose_conditions}-(2) 条件 $XAX = X$。因此，逆矩阵 $B$ 是 $A$ 的 \{1,2\}-逆。
+
+验证 Penrose 方程 \ref{Eq.Penrose_conditions}-(3) 条件 $(AX)^H = AX$ 是否满足
+\begin{lstlisting}[language=Matlab]
+>> disp("Penrose condition 3:")
+disp("(3) (AX)^H=AX")
+disp((A*B)')
+disp(A*B)
+
+Penrose condition 3:
+(3) (AX)^H=AX
+    0.7500    0.2500   -0.2500    0.2500
+    0.2500    0.7500    0.2500   -0.2500
+   -0.2500    0.2500    0.7500    0.2500
+    0.2500   -0.2500    0.2500    0.7500
+
+    0.7500    0.2500   -0.2500    0.2500
+    0.2500    0.7500    0.2500   -0.2500
+   -0.2500    0.2500    0.7500    0.2500
+    0.2500   -0.2500    0.2500    0.7500
+\end{lstlisting}
+逆矩阵 $B$ 满足 Penrose方程 \ref{Eq.Penrose_conditions}-(3) 条件 $(AX)^H = AX$。因此，逆矩阵 $B$ 是 $A$ 的 \{1,2,3\}-逆。
+
+验证 Penrose 方程 \ref{Eq.Penrose_conditions}-(4) 条件 $(XA)^H = XA$ 是否满足
+\begin{lstlisting}[language=Matlab]
+>> disp("Penrose condition 4:")
+disp("(4) (XA)^H=XA")
+disp((B*A)')
+disp(B*A)
+
+Penrose condition 4:
+(4) (XA)^H=XA
+    0.7500    0.2500   -0.2500    0.2500
+    0.2500    0.7500    0.2500   -0.2500
+   -0.2500    0.2500    0.7500    0.2500
+    0.2500   -0.2500    0.2500    0.7500
+
+    0.7500    0.2500   -0.2500    0.2500
+    0.2500    0.7500    0.2500   -0.2500
+   -0.2500    0.2500    0.7500    0.2500
+    0.2500   -0.2500    0.2500    0.7500
+\end{lstlisting}
+逆矩阵 $B$ 满足 Penrose方程 \ref{Eq.Penrose_conditions}-(4) 条件 $(XA)^H = XA$。因此，逆矩阵 $B$ 是完全满足 Penrose 方程的四个条件\ref{Eq.Penrose_conditions}，所以逆矩阵 $B$ 是$A$ 的 Moore-Penrose 逆，即 $B=A^+$。
+
+\subsection{利用广义逆矩阵求解相容方程组的极小范数解}
+\textbf{第 1 问}：
+
+当 $b=(1,1,1,1)^T$ 时，根据方程组 $Ax=b$ 相容的条件 （式\ref{Eq.LinearEqtions_ConsistentCondition}），我们通过计算矩阵的逆 $B=A^{(1)}$ 是否满足 $Ax_0=b$ 和 $ABb=b$ 的条件以判断方程组 $Ax=b$ 是否相容。
+
+\begin{lstlisting}[language=Matlab]  
+>> b=[1;1;1;1];
+>> x_0=B*b;
+disp("x_0=")
+disp(x_0)
+disp("compute A*x_0=")
+disp(A*x_0)
+disp("compute A*A^+*b=")
+disp(A*B*b)
+
+x_0=
+    0.5000
+    0.5000
+    0.5000
+    0.5000
+
+compute A*x_0=
+    1.0000
+    1.0000
+    1.0000
+    1.0000
+
+compute A*A^+*b=
+    1.0000
+    1.0000
+    1.0000
+    1.0000
+\end{lstlisting}
+
+从计算结果可以看出，对于 $A$ 的广义逆 $B=A^{(1)}$ 满足 $Ax_0=b$ 和 $ABb=b$ 条件。因此，对于 $b=(1,1,1,1)^T$ 时的方程组 $Ax=b$ 是相容的。
+
+由于前面我们已经验证，逆矩阵 $B$ 是 $A$ 的 Moore-Penrose 逆，所以可以得出当 $b=(1,1,1,1)^T$ 时方程组 $Ax=b$ 的方程组的极小范数解为 
+\begin{equation}
+    x = A^+b = \frac{1}{2}
+    \begin{bmatrix}
+        1 \\ 1 \\ 1 \\ 1
+    \end{bmatrix}
+\end{equation}
+
+
+通解为
+\begin{equation}
+    \begin{aligned}
+        x   &= A^{(1)}b + (I-A^{(1)}A)y \\
+            &= \frac{1}{2}
+            \begin{bmatrix}
+                1 \\ 1 \\ 1 \\ 1
+            \end{bmatrix} +
+            \frac{1}{4}
+            \begin{bmatrix}
+                1  & -1 & 1  & -1 \\
+                -1 & 1  & -1 & 1  \\
+                1  & -1 & 1  & -1 \\
+                -1 & 1  & -1 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+                \xi_1 \\ \xi_2 \\ \xi_3 \\ \xi_4
+            \end{bmatrix}
+    \end{aligned}
+\end{equation}
+
+对于相容方程组 \ref{Eq.Linear_Eqtions} 来说有无穷多个解，但是可以求出极小范数解，极小范数解用欧式范数 $||\cdot||$ 计算
+\begin{equation}
+    \min\limits_{Ax=b}||x||
+\end{equation}
+
+在 Matlab 中，我们也可以用函数 \lstinline|norm()|  验证该范数的值
+\begin{lstlisting}[language=Matlab] 
+>> disp("\min\limits_x ||x||")
+disp(norm(x_0))
+
+\min\limits_x ||x||
+    1.0000
+\end{lstlisting}
+
+
+\subsection{利用广义逆矩阵求解矛盾方程组极小范数最小二乘解}
+
+\textbf{第 2 问}：
+
+当 $b=(1,0,1,0)^T$ 时，根据方程组 $Ax=b$ 相容的条件 （式\ref{Eq.LinearEqtions_ConsistentCondition}） ，我们通过计算矩阵的逆 $B=A^{(1)}$ 是否满足 $Ax_0=b$ 和 $ABb=b$ 的条件以判断方程组 $Ax=b$ 是否相容。
+
+\begin{lstlisting}[language=Matlab]  
+>> b=[1;0;1;0];
+>> x_0=B*b;
+disp("x_0=")
+disp(x_0)
+disp("compute A*x_0=")
+disp(A*x_0)
+disp("compute A*A^+*b=")
+disp(A*B*b)
+
+x_0=
+    0.2500
+    0.2500
+    0.2500
+    0.2500
+
+compute A*x_0=
+    0.5000
+    0.5000
+    0.5000
+    0.5000
+
+compute A*A^+*b=
+    0.5000
+    0.5000
+    0.5000
+    0.5000
+\end{lstlisting}
+
+从计算结果可以看出，对于 $A$ 的广义逆 $B=A^{(1)}$ 并不满足 $Ax_0=b$ 和 $ABb=b$ 条件。因此，对于 $b=(1,0,1,0)^T$ 时的方程组 $Ax=b$ 是不相容的，是矛盾方程组。
+
+由此可以得出当 $b=(1,0,1,0)^T$ 时，矛盾方程组 $Ax=b$ 的极小范数最小二乘解是唯一的，并且可以由 Moore-Penrose 逆表示，由于前面我们已经验证，逆矩阵 $B$ 是 Moore-Penrose 逆，所以方程组的极小范数最小二乘解为
+\begin{equation}
+    x=A^+b=\frac{1}{4}\begin{bmatrix}
+        1 \\ 1 \\ 1 \\ 1
+    \end{bmatrix}
+\end{equation}
+\begin{lstlisting}[language=Matlab]  
+>> b=[1;0;1;0];
+>> x_0=B*b;
+disp("x_0=")
+disp(x_0)
+
+x_0=
+    0.2500
+    0.2500
+    0.2500
+    0.2500
+\end{lstlisting}
+
+
+对于矛盾方程组 \ref{Eq.Linear_Eqtions} 来说有无穷多个解，但是可以求出极小范数解，极小范数解用欧式范数 $||\cdot||$ 计算
+\begin{equation}
+    \min\limits_{Ax=b}||x||
+\end{equation}
+
+在 Matlab 中，我们也可以用函数 \lstinline|norm()|  验证该范数的值
+\begin{lstlisting}[language=Matlab] 
+>> disp("\min\limits_x ||Ax-b||")
+disp(norm(A*x_0-b))
+
+\min\limits_x ||Ax-b||
+    1.0000
+\end{lstlisting}
